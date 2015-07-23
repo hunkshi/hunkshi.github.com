@@ -71,6 +71,9 @@ stylus:
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repository: git@github.com:hunkshi/hunkshi.github.com.git
-  branch: master
+  - type: git
+    repository: git@github.com:hunkshi/hunkshi.github.com.git
+    branch: master
+  - type: git
+    repository: git@gitcafe.com:hunkshi/hunkshi.git
+    branch: gitcafe-pages
