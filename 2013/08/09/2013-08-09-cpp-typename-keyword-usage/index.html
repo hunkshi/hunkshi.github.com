@@ -1,0 +1,462 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>C++中typename关键字的使用方法和注意事项 | Hunk Shi&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Hunk Shi">
+    
+
+    
+    <meta name="description" content="迁移自原CSDN blog, 做简单整理
+用处1, 用在模板定义里, 标明其后的模板参数是类型参数。例如
+12template&amp;lt;typename  T, typename Y&amp;gt;T foo(const T&amp;amp; t, const Y&amp;amp; y)&amp;#123;//....&amp;#125;;
+12345678templace&amp;lt;typename T&amp;gt;class CTest&amp;#12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++中typename关键字的使用方法和注意事项">
+<meta property="og:url" content="http://yoursite.com/2013/08/09/2013-08-09-cpp-typename-keyword-usage/index.html">
+<meta property="og:site_name" content="Hunk Shi's Blog">
+<meta property="og:description" content="迁移自原CSDN blog, 做简单整理
+用处1, 用在模板定义里, 标明其后的模板参数是类型参数。例如
+12template&amp;lt;typename  T, typename Y&amp;gt;T foo(const T&amp;amp; t, const Y&amp;amp; y)&amp;#123;//....&amp;#125;;
+12345678templace&amp;lt;typename T&amp;gt;class CTest&amp;#12">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++中typename关键字的使用方法和注意事项">
+<meta name="twitter:description" content="迁移自原CSDN blog, 做简单整理
+用处1, 用在模板定义里, 标明其后的模板参数是类型参数。例如
+12template&amp;lt;typename  T, typename Y&amp;gt;T foo(const T&amp;amp; t, const Y&amp;amp; y)&amp;#123;//....&amp;#125;;
+12345678templace&amp;lt;typename T&amp;gt;class CTest&amp;#12">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Hunk Shi&#39;s Blog" title="Hunk Shi&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Hunk Shi&#39;s Blog">Hunk Shi&#39;s Blog</a></h1>
+				<h2 class="blog-motto">Reading maketh a full man, conference a ready man, and writing an exact man.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/08/09/2013-08-09-cpp-typename-keyword-usage/" title="C++中typename关键字的使用方法和注意事项" itemprop="url">C++中typename关键字的使用方法和注意事项</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
+		
+  <p class="article-time">
+    <time datetime="2013-08-09T08:34:00.000Z" itemprop="datePublished"> 发表于 2013-08-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#用处1,_用在模板定义里,_标明其后的模板参数是类型参数。"><span class="toc-number">1.</span> <span class="toc-text">用处1, 用在模板定义里, 标明其后的模板参数是类型参数。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用处2,_模板中标明“内嵌依赖类型名”"><span class="toc-number">2.</span> <span class="toc-text">用处2, 模板中标明“内嵌依赖类型名”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例外"><span class="toc-number">3.</span> <span class="toc-text">例外</span></a></li></ol>
+		
+		</div>
+		
+		<p><strong>迁移自原<a href="http://blog.csdn.net/pizzq/article/details/1487004" target="_blank" rel="external">CSDN blog</a>, 做简单整理</strong></p>
+<h3 id="用处1,_用在模板定义里,_标明其后的模板参数是类型参数。">用处1, 用在模板定义里, 标明其后的模板参数是类型参数。</h3><p>例如</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>  T, <span class="keyword">typename</span> Y&gt;</span><br><span class="line"><span class="function">T <span class="title">foo</span><span class="params">(<span class="keyword">const</span> T&amp; t, <span class="keyword">const</span> Y&amp; y)</span></span>&#123;<span class="comment">//....&#125;;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">templace&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> CTest</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"> T t;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实，这里最常用的是使用关键字class，而且<strong>二者功能完全相同</strong>，这里的class和定义类时的class完全是两回事，C++当时就是为了减少关键字，才使用了class。但最终却不得不引入了typename，究竟是</p>
+<p>什么原因呢？请看第二条，也就是typename的第二个用法。</p>
+<h3 id="用处2,_模板中标明“内嵌依赖类型名”">用处2, 模板中标明“内嵌依赖类型名”</h3><p>这里有三个词，<strong>内嵌、依赖、类型名</strong>。那么什么是“内嵌依赖类型名(nested dependent type name)”？</p>
+<p>请看SGI STL里的一个例子, 只是STL中count范型算法的实现：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _InputIter, <span class="keyword">class</span> _Tp&gt;</span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::<span class="function">difference_type</span><br><span class="line"><span class="title">count</span><span class="params">(_InputIter __first, _InputIter __last, <span class="keyword">const</span> _Tp&amp; __value)</span> </span>&#123;</span><br><span class="line">  __STL_REQUIRES(_InputIter, _InputIterator);</span><br><span class="line">  __STL_REQUIRES(<span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::value_type,</span><br><span class="line">                 _EqualityComparable);</span><br><span class="line">  __STL_REQUIRES(_Tp, _EqualityComparable);</span><br><span class="line">  <span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::difference_type __n = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( ; __first != __last; ++__first)</span><br><span class="line">    <span class="keyword">if</span> (*__first == __value)</span><br><span class="line">      ++__n;</span><br><span class="line">  <span class="keyword">return</span> __n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这里有三个地方用到了typename：返回值、参数、变量定义。分别是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::difference_type</span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::value_type</span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::difference_type __n = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>difference_type， value_type就是依赖于_InputIter（模板类型参数）的类型名。源码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _Iterator&gt;</span><br><span class="line"><span class="keyword">struct</span> iterator_traits &#123;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::iterator_category iterator_category;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::value_type        value_type;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::difference_type   difference_type;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::pointer           pointer;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::reference         reference;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>内嵌是指定义在类名的定义中的</strong>。以上difference_type和value_type都是定义在iterator_traits中的。</li>
+<li><strong>依赖是指依赖于一个模板参数</strong>。 typename iterator_traits<_inputiter>::difference_type中difference_type依赖于模板参数_InputIter。</_inputiter></li>
+<li><strong>类型名是指这里最终要指出的是个类型名，而不是变量</strong>。例如iterator_traits<_inputiter>::difference_type完全有可能是类iterator_traits<_inputiter>  类里的一个static对象。而且当我们这样写的时候，C＋＋默认就是解释为一个变量的。所以，为了和变量区分，必须使用typename告诉编译器。</_inputiter></_inputiter></li>
+</ul>
+<p>那么是不是所有的T::type_or_variable, 或者tmpl<t>:type_or_variable都需要使用typename呢？不是，有以下两个例外。</t></p>
+<h3 id="例外">例外</h3><p>（1）类模板定义中的基类列表。<br>例如<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> Derived: <span class="keyword">public</span> Base&lt;T&gt;::XXX</span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>（2）类模板定义中的初始化列表。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Derived(<span class="keyword">int</span> x) : Base&lt;T&gt;::xxx(x)</span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>为什么这里不需要呢？因为编译器知道这里需要的是类型还是变量，（1）基类列表里肯定是类型名，（2）初始化列表里肯定是成员变量名。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/c/">c++</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2013/08/09/2013-08-09-cpp-typename-keyword-usage/" data-title="C++中typename关键字的使用方法和注意事项 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/12/16/2014-12-16-mongo-shell-format-output/" title="格式化mongo shell的输出">
+  <strong>上一篇：</strong><br/>
+  <span>
+  格式化mongo shell的输出</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#用处1,_用在模板定义里,_标明其后的模板参数是类型参数。"><span class="toc-number">1.</span> <span class="toc-text">用处1, 用在模板定义里, 标明其后的模板参数是类型参数。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用处2,_模板中标明“内嵌依赖类型名”"><span class="toc-number">2.</span> <span class="toc-text">用处2, 模板中标明“内嵌依赖类型名”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例外"><span class="toc-number">3.</span> <span class="toc-text">例外</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/c/" title="c++">c++<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/mongodb/" title="mongodb">mongodb<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Hunk Shi in Opera <br/>
+			This is my blog</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Hunk Shi">Hunk Shi</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
