@@ -75,263 +75,105 @@
     <div id="container">
       <div id="main">
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" title="ssh 隧道和反向隧道" itemprop="url">ssh 隧道和反向隧道</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-15T07:20:01.000Z" itemprop="datePublished"> 发表于 2015-04-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="ssh_隧道">ssh 隧道</h2><h3 id="使用场景">使用场景</h3><p>我们经常要通过跳板机器去访问一些内部的机器，比如Production 环境中的一些服务器，正常模式下如果scp一些文件或者远程执行一些命令，都需要先登录跳板机器，再登录内部的服务器。<br>ssh 隧道可以很方便的解决这个问题。</p>
-<p>假设office里的PC是A， 跳板机器B 111.111.111.111， 内部的server是C，B可以通过内部地址例如192.168.2.2, 端口22访问到C， 如下命令既可建立一个隧道，从A直接到C: ssh -NfL <local port="">:<c address="">:<c port=""> <username>@<b address=""></b></username></c></c></local></p>
-<h3 id="命令">命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -NfL <span class="number">2345</span>:<span class="number">192.168</span>.<span class="number">2.2</span>:<span class="number">22</span> alex@<span class="number">111.111</span>.<span class="number">111.111</span></span><br></pre></td></tr></table></figure>
-<p><strong>参数解释</strong></p>
-<p>-N Do not execute a remote command.  This is useful for just forwarding ports (protocol version 2 only). 即不执行命令， 只做端口转发<br>-f Requests ssh to go to background just before command execution. 然ssh隧道在后台运行。看进程关系即可明白。<br>-L Specifies that the given port on the local (client) host is to be forwarded to the given host and port on the remote side. 指定本地端口用于转发。</p>
-<h3 id="如何使用">如何使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -P <span class="number">2345</span> /path/to/file root@<span class="number">127.0</span>.<span class="number">0.1</span>:/path/on/remote/server</span><br></pre></td></tr></table></figure>
-<p>即可scp文件到server C, 注意2345是建立隧道时指定的本地端口，或者远程执行命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -p <span class="number">2345</span> root@<span class="number">127.0</span>.<span class="number">0.1</span> <span class="string">"ls -l /"</span></span><br></pre></td></tr></table></figure>
-<h2 id="ssh_反向隧道">ssh 反向隧道</h2><h3 id="使用场景-1">使用场景</h3><p>假设有Office机器A，无公网地址，现在有一台公网机器B，家里的机器C和A都可以访问B，那么既可通过B 来实现从C到A的访问。需要先在A和B之间建立一个反向隧道。</p>
-<h3 id="命令-1">命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -NfR <span class="number">2222</span>:<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">22</span> root@B</span><br></pre></td></tr></table></figure>
-<p>那么从C登录到B 之后，即可通过如下命令跳到A<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -p <span class="number">2222</span> alex@localhost</span><br></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
-</div>
-
-
-  <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/ssh/">ssh</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" title="ssh 隧道和反向隧道" itemprop="url">
+  
+    <h1 itemprop="name">ssh 隧道和反向隧道</h1>
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+     
+           <p itemprop="description" >ssh 隧道使用场景我们经常要通过跳板机器去访问一些内部的机器，比如Production 环境中的一些服务器，正常模式下如果scp一些文件或者远程执行一些命令，都需要先登录跳板机器，再登录内部的服务器。ssh 隧道可以很方便的解决这个问题。
+假设office里的PC是A， 跳板机</p>
+        
     
-      <a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" title="回收被 mongodb 占用的硬盘空间" itemprop="url">回收被 mongodb 占用的硬盘空间</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-25T10:07:00.000Z" itemprop="datePublished"> 发表于 2015-03-25</time>
+    <time datetime="2015-04-15T07:20:01.000Z" itemprop="datePublished">2015-04-15</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/04/05/2015-04-05-backup-redis-db/" title="备份redis数据文件" itemprop="url">
+  
+    <h1 itemprop="name">备份redis数据文件</h1>
     
-  </p>
-</header>
-    <div class="article-content">
+     
+           <p itemprop="description" >看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup</p>
         
-        <p>首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种</p>
-<h2 id="1-_dump_&amp;_restore">1. dump &amp; restore</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongodump <span class="operator">-d</span> databasename -o /path/to/dump_dir</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'db.dropDatabase()'</span> | mongo &lt;databasename&gt;</span><br><span class="line">mongorestore <span class="operator">-d</span> &lt;databasename&gt;  /path/to/dump_dir</span><br></pre></td></tr></table></figure>
-<p>如果数据量不大，dump不需要太长时间的情况下，或者经常备份有dump文件的情况下，这种方法很简单。</p>
-<h2 id="2-_repair_database">2. repair database</h2><p>即在mongo shell中运行<code>db.repairDatabase()</code>, 或者<code>db.runCommand({ repairDatabase: 1 })</code>, 第二种方法可以带其他几个参数<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; repairDatabase: 1,</span><br><span class="line">  preserveClonedFilesOnFailure: &lt;boolean&gt;,</span><br><span class="line">  backupOriginalFiles: &lt;boolean&gt; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>repairDatabase是官方文档中认为唯一可以回收硬盘空间的方法。</p>
-<blockquote>
-<p>repairDatabase is the appropriate and the only way to reclaim disk space.</p>
-</blockquote>
-<p>当你有多个shard的且数据量巨大时，dump &amp; restore方法会花费巨大的时间，这时第二种方法的优势就很明显，就是分别在每个shard上运行repairDatabase，结果会快很多。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
-</div>
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+    <time datetime="2015-04-05T06:49:44.000Z" itemprop="datePublished">2015-04-05</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" title="回收被 mongodb 占用的硬盘空间" itemprop="url">
+  
+    <h1 itemprop="name">回收被 mongodb 占用的硬盘空间</h1>
     
-      <a href="/2014/12/16/2014-12-16-mongo-shell-format-output/" title="格式化mongo shell的输出" itemprop="url">格式化mongo shell的输出</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
-		
-  <p class="article-time">
-    <time datetime="2014-12-16T03:08:00.000Z" itemprop="datePublished"> 发表于 2014-12-16</time>
+     
+           <p itemprop="description" >首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
+1. dump &amp;amp</p>
+        
     
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>mongo shell 默认的输出很乱，几乎没法阅读。解决办法如下。</p>
-<h2 id="-pretty()_方法">.pretty() 方法</h2><p><code>db.collection.find().pretty()</code><br>这样的输出会漂亮很多，每个field一行,<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	"<span class="attribute">_id</span>" : <span class="value">ObjectId(<span class="string">"5396cd3823e97923ba689ef3"</span>)</span>,</span><br><span class="line">	"<span class="attribute">batch</span>" : <span class="value"><span class="number">66</span></span>,</span><br><span class="line">	"<span class="attribute">category</span>" : <span class="value"><span class="number">4</span></span>,</span><br><span class="line">	"<span class="attribute">cover_imgs</span>" : <span class="value">[</span><br><span class="line">		<span class="string">"/post_imgs/5396cd3823e97923ba689ef3/c_2.jpg"</span>,</span><br><span class="line">		<span class="string">"/post_imgs/5396cd3823e97923ba689ef3/c_3.jpg"</span>,</span><br><span class="line">		<span class="string">"/post_imgs/5396cd3823e97923ba689ef3/c_4.jpg"</span></span><br><span class="line">	]</span>,</span><br><span class="line">	"<span class="attribute">created_at</span>" : <span class="value">ISODate(<span class="string">"2014-06-10T09:18:06.383Z"</span>)</span>,</span><br><span class="line">	"<span class="attribute">fav_count</span>" : <span class="value"><span class="number">0</span></span>,</span><br><span class="line">	"<span class="attribute">host_reply_count</span>" : <span class="value"><span class="number">338</span></span>,</span><br><span class="line">	"<span class="attribute">last_reply_date</span>" : <span class="value"><span class="string">"2014-06-17 21:22:00"</span></span>,</span><br><span class="line">	"<span class="attribute">post_date</span>" : <span class="value"><span class="string">"2014-06-06 19:57:00"</span></span>,</span><br><span class="line">	"<span class="attribute">referer</span>" : <span class="value"><span class="string">"http://tieba.baidu.com/f?kw=%B9%C5%D7%B0%B5%E7%CA%D3%BE%E7"</span></span>,</span><br><span class="line">	"<span class="attribute">reply_count</span>" : <span class="value"><span class="number">716</span></span>,</span><br><span class="line">	"<span class="attribute">reuse_type</span>" : <span class="value"><span class="number">2</span></span>,</span><br><span class="line">	"<span class="attribute">section</span>" : <span class="value"><span class="string">"古装电视剧"</span></span>,</span><br><span class="line">	"<span class="attribute">seq</span>" : <span class="value"><span class="number">27180</span></span>,</span><br><span class="line">	"<span class="attribute">serial</span>" : <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">	"<span class="attribute">sort_index</span>" : <span class="value"><span class="number">0.997</span></span>,</span><br><span class="line">	"<span class="attribute">source_site</span>" : <span class="value"><span class="string">"贴吧"</span></span>,</span><br><span class="line">	"<span class="attribute">updated_at</span>" : <span class="value">ISODate(<span class="string">"2014-06-18T09:04:55.228Z"</span>)</span>,</span><br><span class="line">	"<span class="attribute">visible</span>" : <span class="value"><span class="literal">true</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">	"<span class="attribute">_id</span>" : <span class="value">ObjectId(<span class="string">"5396c7ca23e97921fb7de8e4"</span>)</span>,</span><br><span class="line">	"<span class="attribute">batch</span>" : <span class="value"><span class="number">74</span></span>,</span><br><span class="line">	"<span class="attribute">category</span>" : <span class="value"><span class="number">4</span></span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="配置使其成为Default">配置使其成为Default</h2><p>添加如下配置到$HOME/.mongorc.js, 如果不存在则创建。<br><code>DBQuery.prototype._prettyShell = true</code></p>
-<p>这样就不需要每次使用pretty()方法了，直接<code>db.collection.find()</code>即可。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
-</div>
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
+    <time datetime="2015-03-25T10:07:00.000Z" itemprop="datePublished">2015-03-25</time>
+  </a>
+</section>
 
 
 
 
 
 
-   
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2014/12/16/2014-12-16-mongo-shell-format-output/" title="格式化mongo shell的输出" itemprop="url">
+  
+    <h1 itemprop="name">格式化mongo shell的输出</h1>
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+     
+           <p itemprop="description" >mongo shell 默认的输出很乱，几乎没法阅读。解决办法如下。
+.pretty() 方法db.collection.find().pretty()这样的输出会漂亮很多，每个field一行,1234567891011121314151617181920212223242526</p>
+        
     
-      <a href="/2013/08/09/2013-08-09-cpp-typename-keyword-usage/" title="C++中typename关键字的使用方法和注意事项" itemprop="url">C++中typename关键字的使用方法和注意事项</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
-		
-  <p class="article-time">
-    <time datetime="2013-08-09T08:34:00.000Z" itemprop="datePublished"> 发表于 2013-08-09</time>
+    <time datetime="2014-12-16T03:08:00.000Z" itemprop="datePublished">2014-12-16</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2013/08/09/2013-08-09-cpp-typename-keyword-usage/" title="C++中typename关键字的使用方法和注意事项" itemprop="url">
+  
+    <h1 itemprop="name">C++中typename关键字的使用方法和注意事项</h1>
     
-  </p>
-</header>
-    <div class="article-content">
+     
+           <p itemprop="description" >迁移自原CSDN blog, 做简单整理
+用处1, 用在模板定义里, 标明其后的模板参数是类型参数。例如
+12template&amp;lt;typename  T, typename Y&amp;gt;T foo(const T&amp;amp; t, const Y&amp;amp; y)&amp;#123;//.</p>
         
-        <p><strong>迁移自原<a href="http://blog.csdn.net/pizzq/article/details/1487004" target="_blank" rel="external">CSDN blog</a>, 做简单整理</strong></p>
-<h3 id="用处1,_用在模板定义里,_标明其后的模板参数是类型参数。">用处1, 用在模板定义里, 标明其后的模板参数是类型参数。</h3><p>例如</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>  T, <span class="keyword">typename</span> Y&gt;</span><br><span class="line"><span class="function">T <span class="title">foo</span><span class="params">(<span class="keyword">const</span> T&amp; t, <span class="keyword">const</span> Y&amp; y)</span></span>&#123;<span class="comment">//....&#125;;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">templace&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> CTest</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"> T t;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其实，这里最常用的是使用关键字class，而且<strong>二者功能完全相同</strong>，这里的class和定义类时的class完全是两回事，C++当时就是为了减少关键字，才使用了class。但最终却不得不引入了typename，究竟是</p>
-<p>什么原因呢？请看第二条，也就是typename的第二个用法。</p>
-<h3 id="用处2,_模板中标明“内嵌依赖类型名”">用处2, 模板中标明“内嵌依赖类型名”</h3><p>这里有三个词，<strong>内嵌、依赖、类型名</strong>。那么什么是“内嵌依赖类型名(nested dependent type name)”？</p>
-<p>请看SGI STL里的一个例子, 只是STL中count范型算法的实现：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _InputIter, <span class="keyword">class</span> _Tp&gt;</span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::<span class="function">difference_type</span><br><span class="line"><span class="title">count</span><span class="params">(_InputIter __first, _InputIter __last, <span class="keyword">const</span> _Tp&amp; __value)</span> </span>&#123;</span><br><span class="line">  __STL_REQUIRES(_InputIter, _InputIterator);</span><br><span class="line">  __STL_REQUIRES(<span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::value_type,</span><br><span class="line">                 _EqualityComparable);</span><br><span class="line">  __STL_REQUIRES(_Tp, _EqualityComparable);</span><br><span class="line">  <span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::difference_type __n = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( ; __first != __last; ++__first)</span><br><span class="line">    <span class="keyword">if</span> (*__first == __value)</span><br><span class="line">      ++__n;</span><br><span class="line">  <span class="keyword">return</span> __n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这里有三个地方用到了typename：返回值、参数、变量定义。分别是：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::difference_type</span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::value_type</span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;_InputIter&gt;::difference_type __n = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>difference_type， value_type就是依赖于_InputIter（模板类型参数）的类型名。源码如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> _Iterator&gt;</span><br><span class="line"><span class="keyword">struct</span> iterator_traits &#123;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::iterator_category iterator_category;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::value_type        value_type;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::difference_type   difference_type;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::pointer           pointer;</span><br><span class="line">  <span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::reference         reference;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>内嵌是指定义在类名的定义中的</strong>。以上difference_type和value_type都是定义在iterator_traits中的。</li>
-<li><strong>依赖是指依赖于一个模板参数</strong>。 typename iterator_traits<_inputiter>::difference_type中difference_type依赖于模板参数_InputIter。</_inputiter></li>
-<li><strong>类型名是指这里最终要指出的是个类型名，而不是变量</strong>。例如iterator_traits<_inputiter>::difference_type完全有可能是类iterator_traits<_inputiter>  类里的一个static对象。而且当我们这样写的时候，C＋＋默认就是解释为一个变量的。所以，为了和变量区分，必须使用typename告诉编译器。</_inputiter></_inputiter></li>
-</ul>
-<p>那么是不是所有的T::type_or_variable, 或者tmpl<t>:type_or_variable都需要使用typename呢？不是，有以下两个例外。</t></p>
-<h3 id="例外">例外</h3><p>（1）类模板定义中的基类列表。<br>例如<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> Derived: <span class="keyword">public</span> Base&lt;T&gt;::XXX</span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>（2）类模板定义中的初始化列表。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Derived(<span class="keyword">int</span> x) : Base&lt;T&gt;::xxx(x)</span><br><span class="line">&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>为什么这里不需要呢？因为编译器知道这里需要的是类型还是变量，（1）基类列表里肯定是类型名，（2）初始化列表里肯定是成员变量名。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/c/">c++</a>
-</div>
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
+    
+    <time datetime="2013-08-09T08:34:00.000Z" itemprop="datePublished">2013-08-09</time>
+  </a>
+</section>
 
 
 
@@ -363,6 +205,10 @@
 			<li><a href="/categories/mongodb/" title="mongodb">mongodb<sup>2</sup></a></li>
 		  
 		
+		  
+			<li><a href="/categories/redis/" title="redis">redis<sup>1</sup></a></li>
+		  
+		
 		</ul>
 </div>
 
@@ -381,6 +227,8 @@
 			
 		
 			
+				<li><a href="/tags/redis/" title="redis">redis<sup>1</sup></a></li>
+			
 		
 		</ul>
 </div>
@@ -392,9 +240,6 @@
         
     </ul>
 </div>
-
-  
-
 
   <div class="rsspart">
 	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
@@ -413,6 +258,10 @@
 	 
 	<div class="social-font" class="clearfix">
 		
+		<a href="http://weibo.com/hunkshi" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/hunkshi" target="_blank" class="icon-github" title="github"></a>
 		
 		
 		
@@ -421,6 +270,8 @@
 		
 		
 		
+		
+		<a href="mailto:ppizzq@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
 		
 	</div>
 			
@@ -487,6 +338,18 @@ $(document).ready(function(){
 
 
 
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"hunkshi-gitcafe"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
 
 
 

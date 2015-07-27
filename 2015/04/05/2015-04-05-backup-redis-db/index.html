@@ -4,25 +4,28 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>回收被 mongodb 占用的硬盘空间 | Hunk Shi&#39;s Blog</title>
+    <title>备份redis数据文件 | Hunk Shi&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Hunk Shi">
     
 
     
-    <meta name="description" content="首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
-1. dump &amp;amp; restore123mongodump -d databasename -o /path/to/dump_direc">
+    <meta name="description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
+有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
+首先">
 <meta property="og:type" content="article">
-<meta property="og:title" content="回收被 mongodb 占用的硬盘空间">
-<meta property="og:url" content="http://yoursite.com/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/index.html">
+<meta property="og:title" content="备份redis数据文件">
+<meta property="og:url" content="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/index.html">
 <meta property="og:site_name" content="Hunk Shi's Blog">
-<meta property="og:description" content="首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
-1. dump &amp;amp; restore123mongodump -d databasename -o /path/to/dump_direc">
+<meta property="og:description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
+有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
+首先">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="回收被 mongodb 占用的硬盘空间">
-<meta name="twitter:description" content="首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
-1. dump &amp;amp; restore123mongodump -d databasename -o /path/to/dump_direc">
+<meta name="twitter:title" content="备份redis数据文件">
+<meta name="twitter:description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
+有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
+首先">
 
     
     <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
@@ -82,14 +85,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" title="回收被 mongodb 占用的硬盘空间" itemprop="url">回收被 mongodb 占用的硬盘空间</a>
+      <a href="/2015/04/05/2015-04-05-backup-redis-db/" title="备份redis数据文件" itemprop="url">备份redis数据文件</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
 		
   <p class="article-time">
-    <time datetime="2015-03-25T10:07:00.000Z" itemprop="datePublished"> 发表于 2015-03-25</time>
+    <time datetime="2015-04-05T06:49:44.000Z" itemprop="datePublished"> 发表于 2015-04-05</time>
     
   </p>
 </header>
@@ -98,19 +101,15 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_dump_&_restore"><span class="toc-number">1.</span> <span class="toc-text">1. dump & restore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_repair_database"><span class="toc-number">2.</span> <span class="toc-text">2. repair database</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p>首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种</p>
-<h2 id="1-_dump_&amp;_restore">1. dump &amp; restore</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongodump <span class="operator">-d</span> databasename -o /path/to/dump_dir</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'db.dropDatabase()'</span> | mongo &lt;databasename&gt;</span><br><span class="line">mongorestore <span class="operator">-d</span> &lt;databasename&gt;  /path/to/dump_dir</span><br></pre></td></tr></table></figure>
-<p>如果数据量不大，dump不需要太长时间的情况下，或者经常备份有dump文件的情况下，这种方法很简单。</p>
-<h2 id="2-_repair_database">2. repair database</h2><p>即在mongo shell中运行<code>db.repairDatabase()</code>, 或者<code>db.runCommand({ repairDatabase: 1 })</code>, 第二种方法可以带其他几个参数<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; repairDatabase: 1,</span><br><span class="line">  preserveClonedFilesOnFailure: &lt;boolean&gt;,</span><br><span class="line">  backupOriginalFiles: &lt;boolean&gt; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>repairDatabase是官方文档中认为唯一可以回收硬盘空间的方法。</p>
-<blockquote>
-<p>repairDatabase is the appropriate and the only way to reclaim disk space.</p>
-</blockquote>
-<p>当你有多个shard的且数据量巨大时，dump &amp; restore方法会花费巨大的时间，这时第二种方法的优势就很明显，就是分别在每个shard上运行repairDatabase，结果会快很多。</p>
+		<p>看如下脚本，<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"></span></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">redis-cli SAVE</span><br><span class="line"></span><br><span class="line">date=$(date +<span class="string">"%Y%m%d"</span>)</span><br><span class="line">cp /var/lib/redis/<span class="number">6379</span>/dump.rdb /data01/cache_backup/<span class="variable">$date</span>.rdb</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"done!"</span></span><br></pre></td></tr></table></figure></p>
+<p>有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：</p>
+<p>首先必须进行SAVE, 因为redis的rdb文件并非总是内存数据的完整镜像，备份之前必须进行SAVE，即向其发送SAVE命令，其次拷贝走其rdb文件即可。</p>
+<p>rdb的具体路径不一定是如上路径，可以在redis配置文件中查找, /etc/redis/6379.conf</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># The filename where to dump the DB</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="preprocessor"># The working directory.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># The DB will be written inside this directory, with the filename specified</span></span><br><span class="line"><span class="preprocessor"># above using the 'dbfilename' configuration directive.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># Also the Append Only File will be created inside this directory.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># Note that you must specify a directory here, not a file name.</span></span><br><span class="line">dir /<span class="keyword">var</span>/lib/redis/<span class="number">6379</span></span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -118,9 +117,14 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
+  <a class="article-category-link" href="/categories/redis/">redis</a>
 </div>
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/redis/">redis</a>
+  </div>
 
 </div>
 
@@ -128,7 +132,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" data-title="回收被 mongodb 占用的硬盘空间 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/" data-title="备份redis数据文件 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -142,18 +146,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/04/05/2015-04-05-backup-redis-db/" title="备份redis数据文件">
+ <a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" title="ssh 隧道和反向隧道">
   <strong>上一篇：</strong><br/>
   <span>
-  备份redis数据文件</span>
+  ssh 隧道和反向隧道</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/12/16/2014-12-16-mongo-shell-format-output/"  title="格式化mongo shell的输出">
+<a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/"  title="回收被 mongodb 占用的硬盘空间">
  <strong>下一篇：</strong><br/> 
- <span>格式化mongo shell的输出
+ <span>回收被 mongodb 占用的硬盘空间
 </span>
 </a>
 </div>
@@ -162,7 +166,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" data-title="回收被 mongodb 占用的硬盘空间" data-url="http://yoursite.com/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/"></div>
+	<div class="ds-thread" data-thread-key="2015/04/05/2015-04-05-backup-redis-db/" data-title="备份redis数据文件" data-url="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/"></div>
 </section>
 
 
@@ -172,7 +176,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_dump_&_restore"><span class="toc-number">1.</span> <span class="toc-text">1. dump & restore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_repair_database"><span class="toc-number">2.</span> <span class="toc-text">2. repair database</span></a></li></ol>
+ 
  
   </div>
 
