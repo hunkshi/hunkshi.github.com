@@ -4,28 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>备份redis数据文件 | Hunk Shi&#39;s Blog</title>
+    <title>备份nginx日志 | Hunk Shi&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Hunk Shi">
     
 
     
-    <meta name="description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
-有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
-首先">
+    <meta name="description" content="我们经常需要每天rotate前一天的nginx log，如下是一个通用的脚本
+123456789101112#! /bin/bashdate=$(date --date=&quot;-1 day&quot; +&quot;%Y-%m-%d&quot;)target_dir=/data01/log_backuptarget_filename=nginx-access-app-name.$date.logmv /var/log/your-a">
 <meta property="og:type" content="article">
-<meta property="og:title" content="备份redis数据文件">
-<meta property="og:url" content="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/index.html">
+<meta property="og:title" content="备份nginx日志">
+<meta property="og:url" content="http://yoursite.com/2015/02/15/2015-02-15-backup-nginx-log/index.html">
 <meta property="og:site_name" content="Hunk Shi's Blog">
-<meta property="og:description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
-有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
-首先">
+<meta property="og:description" content="我们经常需要每天rotate前一天的nginx log，如下是一个通用的脚本
+123456789101112#! /bin/bashdate=$(date --date=&quot;-1 day&quot; +&quot;%Y-%m-%d&quot;)target_dir=/data01/log_backuptarget_filename=nginx-access-app-name.$date.logmv /var/log/your-a">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="备份redis数据文件">
-<meta name="twitter:description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
-有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
-首先">
+<meta name="twitter:title" content="备份nginx日志">
+<meta name="twitter:description" content="我们经常需要每天rotate前一天的nginx log，如下是一个通用的脚本
+123456789101112#! /bin/bashdate=$(date --date=&quot;-1 day&quot; +&quot;%Y-%m-%d&quot;)target_dir=/data01/log_backuptarget_filename=nginx-access-app-name.$date.logmv /var/log/your-a">
 
     
     <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
@@ -85,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/05/2015-04-05-backup-redis-db/" title="备份redis数据文件" itemprop="url">备份redis数据文件</a>
+      <a href="/2015/02/15/2015-02-15-backup-nginx-log/" title="备份nginx日志" itemprop="url">备份nginx日志</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-05T06:49:44.000Z" itemprop="datePublished"> 发表于 2015-04-05</time>
+    <time datetime="2015-02-15T03:25:04.000Z" itemprop="datePublished"> 发表于 2015-02-15</time>
     
   </p>
 </header>
@@ -105,11 +102,18 @@
 		
 		</div>
 		
-		<p>看如下脚本，<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"></span></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">redis-cli SAVE</span><br><span class="line"></span><br><span class="line">date=$(date +<span class="string">"%Y%m%d"</span>)</span><br><span class="line">cp /var/lib/redis/<span class="number">6379</span>/dump.rdb /data01/cache_backup/<span class="variable">$date</span>.rdb</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"done!"</span></span><br></pre></td></tr></table></figure></p>
-<p>有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：</p>
-<p>首先必须进行SAVE, 因为redis的rdb文件并非总是内存数据的完整镜像，备份之前必须进行SAVE，即向其发送SAVE命令，其次拷贝走其rdb文件即可。</p>
-<p>rdb的具体路径不一定是如上路径，可以在redis配置文件中查找, /etc/redis/6379.conf</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># The filename where to dump the DB</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="preprocessor"># The working directory.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># The DB will be written inside this directory, with the filename specified</span></span><br><span class="line"><span class="preprocessor"># above using the 'dbfilename' configuration directive.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># Also the Append Only File will be created inside this directory.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># Note that you must specify a directory here, not a file name.</span></span><br><span class="line">dir /<span class="keyword">var</span>/lib/redis/<span class="number">6379</span></span><br></pre></td></tr></table></figure>
+		<p>我们经常需要每天rotate前一天的nginx log，如下是一个通用的脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"></span></span><br><span class="line">date=$(date --date=<span class="string">"-1 day"</span> +<span class="string">"%Y-%m-%d"</span>)</span><br><span class="line">target_dir=/data01/<span class="built_in">log</span>_backup</span><br><span class="line">target_filename=nginx-access-app-name.<span class="variable">$date</span>.log</span><br><span class="line"></span><br><span class="line">mv /var/<span class="built_in">log</span>/your-app-name/nginx-access.log /var/<span class="built_in">log</span>/your-app-name/<span class="variable">$target_filename</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `cat /var/run/nginx-app-name.pid`</span><br><span class="line"></span><br><span class="line">mv /var/<span class="built_in">log</span>/you-app-name/<span class="variable">$target_filename</span> <span class="variable">$target_dir</span>/</span><br><span class="line"></span><br><span class="line"><span class="comment"># call other script here, e.g. parse_log.sh $target_dir/$target_filename</span></span><br></pre></td></tr></table></figure>
+<p>注意的几点：</p>
+<ol>
+<li><p>第7行和第10行有两个mv，第一个mv把log改名在同一个文件夹下，发送信号后再mv走，是因为我们经常存储备份文件的盘是一个独立的硬盘，如果文件较大，直接mv会卡住几秒钟。</p>
+</li>
+<li><p>USR1是nginx 用于<code>Reopen the log files</code>的信号，参见<a href="http://wiki.nginx.org/CommandLine" target="_blank" rel="external">nginx 文档</a></p>
+</li>
+<li><p>mv完毕后可以调用其他脚本进行log处理</p>
+</li>
+</ol>
+<p>如上脚本完毕后，即可配置crontab定期运行，例如如下，每天晚上00：05进行log rotate<br><code>05 00 * * * /path/to/you_app_dir/log_rotate.sh</code></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -117,13 +121,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/redis/">redis</a>
+  <a class="article-category-link" href="/categories/nginx/">nginx</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/redis/">redis</a>
+  <span></span> <a href="/tags/nginx/">nginx</a>
   </div>
 
 </div>
@@ -132,7 +136,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/" data-title="备份redis数据文件 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/02/15/2015-02-15-backup-nginx-log/" data-title="备份nginx日志 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -146,18 +150,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" title="ssh 隧道和反向隧道">
+ <a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" title="回收被 mongodb 占用的硬盘空间">
   <strong>上一篇：</strong><br/>
   <span>
-  ssh 隧道和反向隧道</span>
+  回收被 mongodb 占用的硬盘空间</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/"  title="回收被 mongodb 占用的硬盘空间">
+<a href="/2014/12/16/2014-12-16-mongo-shell-format-output/"  title="格式化mongo shell的输出">
  <strong>下一篇：</strong><br/> 
- <span>回收被 mongodb 占用的硬盘空间
+ <span>格式化mongo shell的输出
 </span>
 </a>
 </div>
@@ -166,7 +170,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/05/2015-04-05-backup-redis-db/" data-title="备份redis数据文件" data-url="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/"></div>
+	<div class="ds-thread" data-thread-key="2015/02/15/2015-02-15-backup-nginx-log/" data-title="备份nginx日志" data-url="http://yoursite.com/2015/02/15/2015-02-15-backup-nginx-log/"></div>
 </section>
 
 
