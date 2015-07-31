@@ -109,7 +109,7 @@
 <p>有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：</p>
 <p>首先必须进行SAVE, 因为redis的rdb文件并非总是内存数据的完整镜像，备份之前必须进行SAVE，即向其发送SAVE命令，其次拷贝走其rdb文件即可。</p>
 <p>rdb的具体路径不一定是如上路径，可以在redis配置文件中查找, /etc/redis/6379.conf</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># The filename where to dump the DB</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="preprocessor"># The working directory.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># The DB will be written inside this directory, with the filename specified</span></span><br><span class="line"><span class="preprocessor"># above using the 'dbfilename' configuration directive.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># Also the Append Only File will be created inside this directory.</span></span><br><span class="line"><span class="preprocessor">#</span></span><br><span class="line"><span class="preprocessor"># Note that you must specify a directory here, not a file name.</span></span><br><span class="line">dir /<span class="keyword">var</span>/lib/redis/<span class="number">6379</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The filename where to dump the DB</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="comment"># The working directory.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The DB will be written inside this directory, with the filename specified</span></span><br><span class="line"><span class="comment"># above using the 'dbfilename' configuration directive.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Also the Append Only File will be created inside this directory.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Note that you must specify a directory here, not a file name.</span></span><br><span class="line">dir /<span class="reserved">var</span>/lib/redis/<span class="number">6379</span></span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -206,6 +206,10 @@
 		  
 		
 		  
+			<li><a href="/categories/python/" title="python">python<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/redis/" title="redis">redis<sup>1</sup></a></li>
 		  
 		
@@ -217,6 +221,10 @@
 <div class="tagslist">
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/PIL-Pillow/" title="PIL Pillow">PIL Pillow<sup>1</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>

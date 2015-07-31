@@ -4,25 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>回收被 mongodb 占用的硬盘空间 | Hunk Shi&#39;s Blog</title>
+    <title>Python PIL &amp; Pillow 安装 | Hunk Shi&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Hunk Shi">
     
 
     
-    <meta name="description" content="首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
-1. dump &amp;amp; restore123mongodump -d databasename -o /path/to/dump_direc">
+    <meta name="description" content="IntroductionPIL(Python Imaging Library)是python处理图片的库，Pillow is the “friendly PIL fork”。PIL最新版本是 1.1.7, 最近的更新是在2009年。推荐使用Pillow。
+安装正常情况，只需pip install PIL==1.1.7 或者pip install Pillow==2.9.0即可。但需留意安装后的输出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="回收被 mongodb 占用的硬盘空间">
-<meta property="og:url" content="http://yoursite.com/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/index.html">
+<meta property="og:title" content="Python PIL & Pillow 安装">
+<meta property="og:url" content="http://yoursite.com/2015/05/03/2015-05-03-pil-pillow-setup/index.html">
 <meta property="og:site_name" content="Hunk Shi's Blog">
-<meta property="og:description" content="首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
-1. dump &amp;amp; restore123mongodump -d databasename -o /path/to/dump_direc">
+<meta property="og:description" content="IntroductionPIL(Python Imaging Library)是python处理图片的库，Pillow is the “friendly PIL fork”。PIL最新版本是 1.1.7, 最近的更新是在2009年。推荐使用Pillow。
+安装正常情况，只需pip install PIL==1.1.7 或者pip install Pillow==2.9.0即可。但需留意安装后的输出">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="回收被 mongodb 占用的硬盘空间">
-<meta name="twitter:description" content="首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种
-1. dump &amp;amp; restore123mongodump -d databasename -o /path/to/dump_direc">
+<meta name="twitter:title" content="Python PIL & Pillow 安装">
+<meta name="twitter:description" content="IntroductionPIL(Python Imaging Library)是python处理图片的库，Pillow is the “friendly PIL fork”。PIL最新版本是 1.1.7, 最近的更新是在2009年。推荐使用Pillow。
+安装正常情况，只需pip install PIL==1.1.7 或者pip install Pillow==2.9.0即可。但需留意安装后的输出">
 
     
     <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
@@ -82,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" title="回收被 mongodb 占用的硬盘空间" itemprop="url">回收被 mongodb 占用的硬盘空间</a>
+      <a href="/2015/05/03/2015-05-03-pil-pillow-setup/" title="Python PIL &amp; Pillow 安装" itemprop="url">Python PIL &amp; Pillow 安装</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
 		
   <p class="article-time">
-    <time datetime="2015-03-25T10:07:00.000Z" itemprop="datePublished"> 发表于 2015-03-25</time>
+    <time datetime="2015-05-03T08:13:58.000Z" itemprop="datePublished"> 发表于 2015-05-03</time>
     
   </p>
 </header>
@@ -98,19 +98,31 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_dump_&_restore"><span class="toc-number">1.</span> <span class="toc-text">1. dump & restore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_repair_database"><span class="toc-number">2.</span> <span class="toc-text">2. repair database</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#依赖库(library)安装"><span class="toc-number">3.</span> <span class="toc-text">依赖库(library)安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重新安装"><span class="toc-number">4.</span> <span class="toc-text">重新安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebP格式的支持"><span class="toc-number">5.</span> <span class="toc-text">WebP格式的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共存的问题"><span class="toc-number">6.</span> <span class="toc-text">共存的问题</span></a></li></ol>
 		
 		</div>
 		
-		<p>首先一点就是mongodb 不会释放已经占用的硬盘空间，即使drop collection也不行，除非drop database。如果一个db曾经有大量的数据一段时间后又删除的话，硬盘空间就是一个问题，如何收回被mongdodb占用的多余空间？方法有两种</p>
-<h2 id="1-_dump_&amp;_restore">1. dump &amp; restore</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongodump <span class="operator">-d</span> databasename -o /path/to/dump_dir</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'db.dropDatabase()'</span> | mongo &lt;databasename&gt;</span><br><span class="line">mongorestore <span class="operator">-d</span> &lt;databasename&gt;  /path/to/dump_dir</span><br></pre></td></tr></table></figure>
-<p>如果数据量不大，dump不需要太长时间的情况下，或者经常备份有dump文件的情况下，这种方法很简单。</p>
-<h2 id="2-_repair_database">2. repair database</h2><p>即在mongo shell中运行<code>db.repairDatabase()</code>, 或者<code>db.runCommand({ repairDatabase: 1 })</code>, 第二种方法可以带其他几个参数<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; repairDatabase: 1,</span><br><span class="line">  preserveClonedFilesOnFailure: &lt;boolean&gt;,</span><br><span class="line">  backupOriginalFiles: &lt;boolean&gt; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>repairDatabase是官方文档中认为唯一可以回收硬盘空间的方法。</p>
-<blockquote>
-<p>repairDatabase is the appropriate and the only way to reclaim disk space.</p>
-</blockquote>
-<p>当你有多个shard的且数据量巨大时，dump &amp; restore方法会花费巨大的时间，这时第二种方法的优势就很明显，就是分别在每个shard上运行repairDatabase，结果会快很多。</p>
+		<h2 id="Introduction">Introduction</h2><p>PIL(Python Imaging Library)是python处理图片的库，Pillow is the “friendly PIL fork”。<br>PIL最新版本是 1.1.7, 最近的更新是在2009年。推荐使用Pillow。</p>
+<h2 id="安装">安装</h2><p>正常情况，只需<code>pip install PIL==1.1.7</code> 或者<code>pip install Pillow==2.9.0</code>即可。但需留意安装后的输出</p>
+<p>安装完成后，需留意输出：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> TKINTER support not available</span><br><span class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> JPEG support not available</span><br><span class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> WEBP support not available</span><br><span class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> ZLIB (PNG/ZIP) support not available</span><br><span class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> FREETYPE2 support not available</span><br><span class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> LITTLECMS support not available</span><br></pre></td></tr></table></figure></p>
+<p>是否有需要但不支持的格式，如果有，需安装支持的包。以jpg/png/web为例。</p>
+<h2 id="依赖库(library)安装">依赖库(library)安装</h2><p>首先检查是否已经安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ll /usr/lib/libjpeg.*</span><br><span class="line"></span><br><span class="line">-rw-r--r-- <span class="number">1</span> root root <span class="number">221942</span> Jun <span class="number">30</span>  <span class="number">2010</span> /usr/lib/libjpeg.a</span><br><span class="line">-rw-r--r-- <span class="number">1</span> root root    <span class="number">918</span> Jun <span class="number">30</span>  <span class="number">2010</span> /usr/lib/libjpeg.la</span><br><span class="line">lrwxrwxrwx <span class="number">1</span> root root     <span class="number">17</span> Mar <span class="number">21</span> <span class="number">16</span>:<span class="number">19</span> /usr/lib/libjpeg.so -&gt; libjpeg.so.<span class="number">62.0</span>.<span class="number">0</span></span><br><span class="line">lrwxrwxrwx <span class="number">1</span> root root     <span class="number">17</span> Jan <span class="number">10</span> <span class="number">10</span>:<span class="number">44</span> /usr/lib/libjpeg.so.<span class="number">62</span> -&gt; libjpeg.so.<span class="number">62.0</span>.<span class="number">0</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> root root <span class="number">145048</span> Jun <span class="number">30</span>  <span class="number">2010</span> /usr/lib/libjpeg.so.<span class="number">62.0</span>.<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>如果没有，则需要安装包<br>For Debian<br><code>apt-get install libjpeg8-dev</code>      for jpg<br><code>apt-get install zlib1g-dev</code>        for png<br><code>apt-get install libwebp-dev</code>        for webp</p>
+<p>For Centos<br><code>yum install libjpeg-devel libpng-devel libwebp-devel</code></p>
+<p>安装完成后，还需要手动建立软链接</p>
+<p>For  DEBIAN 7  &amp; Ubuntu14.04<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ln <span class="operator">-s</span> /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib</span><br><span class="line">ln <span class="operator">-s</span> /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib</span><br><span class="line">ln <span class="operator">-s</span> /usr/lib/x86_64-linux-gnu/libz.so /usr/lib</span><br><span class="line">ln <span class="operator">-s</span> /usr/lib/x86_64-linux-gnu/libwebp.so /usr/lib</span><br></pre></td></tr></table></figure></p>
+<p>For Centos 6.5<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ls <span class="operator">-s</span> /usr/lib64/libjpeg.so /usr/lib</span><br><span class="line">ls <span class="operator">-s</span> /usr/lib64/libz.so /usr/lib</span><br><span class="line">ls <span class="operator">-s</span> /usr/lib64/libwebp.so /usr/lib</span><br></pre></td></tr></table></figure></p>
+<h2 id="重新安装">重新安装</h2><p>以上就绪后，两种办法重新安装:</p>
+<ol>
+<li><code>pip install -I PIL==1.1.7</code>, -I意思是Force reinstall。安装完成时留意输出对格式的支持。</li>
+</ol>
+<p>2.下载源码重装一次，以PIL为例<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//effbot.org/downloads/Imaging-1.1.7.tar.gz</span></span><br><span class="line">tar -xzvf Imaging-<span class="number">1.1</span>.<span class="number">7</span><span class="class">.tar</span><span class="class">.gz</span></span><br><span class="line">cd Imaging-<span class="number">1.1</span>.<span class="number">7</span></span><br><span class="line">python setup<span class="class">.py</span> install</span><br></pre></td></tr></table></figure></p>
+<p>对格式的支持可在源码目录下<br><code>python selftest.py</code><br><em>*</em> TKINTER support not installed<br>—- JPEG support ok<br>—- ZLIB (PNG/ZIP) support ok</p>
+<p>如果这里有问题(Debian &amp; Ubuntu没有，但Centos 6.5有), 需要 <code>python setup.py build_ext -i</code>  然后重试。</p>
+<h2 id="WebP格式的支持">WebP格式的支持</h2><p>PIL太老了，缺少对webp格式的支持，必须换Pillow 2.0以上版本。</p>
+<h2 id="共存的问题">共存的问题</h2><p>要使用Pillow，需先卸载PIL，<code>pip uninstall PIL</code>如果卸载失败，只能手动删除<br><code>sudo rm -rf /usr/share/pyshared/PIL.pt</code><br><code>sudo rm -rf /usr/share/pyshared/PIL</code></p>
+<p><code>pip install Pillow==2.9.0</code></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -118,9 +130,14 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
+  <a class="article-category-link" href="/categories/python/">python</a>
 </div>
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/PIL-Pillow/">PIL Pillow</a>
+  </div>
 
 </div>
 
@@ -128,7 +145,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" data-title="回收被 mongodb 占用的硬盘空间 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/05/03/2015-05-03-pil-pillow-setup/" data-title="Python PIL &amp; Pillow 安装 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -141,19 +158,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/04/05/2015-04-05-backup-redis-db/" title="备份redis数据文件">
-  <strong>上一篇：</strong><br/>
-  <span>
-  备份redis数据文件</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/02/15/2015-02-15-backup-nginx-log/"  title="备份nginx日志">
+<a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/"  title="ssh 隧道和反向隧道">
  <strong>下一篇：</strong><br/> 
- <span>备份nginx日志
+ <span>ssh 隧道和反向隧道
 </span>
 </a>
 </div>
@@ -162,7 +171,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/" data-title="回收被 mongodb 占用的硬盘空间" data-url="http://yoursite.com/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/"></div>
+	<div class="ds-thread" data-thread-key="2015/05/03/2015-05-03-pil-pillow-setup/" data-title="Python PIL & Pillow 安装" data-url="http://yoursite.com/2015/05/03/2015-05-03-pil-pillow-setup/"></div>
 </section>
 
 
@@ -172,7 +181,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_dump_&_restore"><span class="toc-number">1.</span> <span class="toc-text">1. dump & restore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_repair_database"><span class="toc-number">2.</span> <span class="toc-text">2. repair database</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#依赖库(library)安装"><span class="toc-number">3.</span> <span class="toc-text">依赖库(library)安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重新安装"><span class="toc-number">4.</span> <span class="toc-text">重新安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebP格式的支持"><span class="toc-number">5.</span> <span class="toc-text">WebP格式的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共存的问题"><span class="toc-number">6.</span> <span class="toc-text">共存的问题</span></a></li></ol>
  
   </div>
 
