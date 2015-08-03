@@ -4,28 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>备份redis数据文件 | Hunk Shi&#39;s Blog</title>
+    <title>mongodb备份和恢复 | Hunk Shi&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Hunk Shi">
     
 
     
-    <meta name="description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
-有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
-首先">
+    <meta name="description" content="dump &amp;amp; restore方法要备份一个数据库，mongorestore -d db  /path/to/back_up例如:mongodump -d bookstore -o /data01/db_backup/该命令会dump出该DB所有的collection
+从备份文件夹恢复数据mongorestore -d bookstore  /data01/db_backup/booksto">
 <meta property="og:type" content="article">
-<meta property="og:title" content="备份redis数据文件">
-<meta property="og:url" content="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/index.html">
+<meta property="og:title" content="mongodb备份和恢复">
+<meta property="og:url" content="http://yoursite.com/2015/04/22/2015-04-22-mongodb-dump-and-restore/index.html">
 <meta property="og:site_name" content="Hunk Shi's Blog">
-<meta property="og:description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
-有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
-首先">
+<meta property="og:description" content="dump &amp;amp; restore方法要备份一个数据库，mongorestore -d db  /path/to/back_up例如:mongodump -d bookstore -o /data01/db_backup/该命令会dump出该DB所有的collection
+从备份文件夹恢复数据mongorestore -d bookstore  /data01/db_backup/booksto">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="备份redis数据文件">
-<meta name="twitter:description" content="看如下脚本，123456789#! /bin/bashPATH=/usr/local/bin:$PATHredis-cli SAVEdate=$(date +&quot;%Y%m%d&quot;)cp /var/lib/redis/6379/dump.rdb /data01/cache_backup/$date.rdbecho &quot;done!&quot;
-有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：
-首先">
+<meta name="twitter:title" content="mongodb备份和恢复">
+<meta name="twitter:description" content="dump &amp;amp; restore方法要备份一个数据库，mongorestore -d db  /path/to/back_up例如:mongodump -d bookstore -o /data01/db_backup/该命令会dump出该DB所有的collection
+从备份文件夹恢复数据mongorestore -d bookstore  /data01/db_backup/booksto">
 
     
     <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
@@ -85,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/05/2015-04-05-backup-redis-db/" title="备份redis数据文件" itemprop="url">备份redis数据文件</a>
+      <a href="/2015/04/22/2015-04-22-mongodb-dump-and-restore/" title="mongodb备份和恢复" itemprop="url">mongodb备份和恢复</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-05T06:49:44.000Z" itemprop="datePublished"> 发表于 2015-04-05</time>
+    <time datetime="2015-04-22T10:49:52.000Z" itemprop="datePublished"> 发表于 2015-04-22</time>
     
   </p>
 </header>
@@ -101,15 +98,25 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dump_&_restore方法"><span class="toc-number">1.</span> <span class="toc-text">dump & restore方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#只备份或回复指定的collection"><span class="toc-number">1.1.</span> <span class="toc-text">只备份或回复指定的collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过条件查询dump"><span class="toc-number">1.2.</span> <span class="toc-text">通过条件查询dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-number">1.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接备份数据文件"><span class="toc-number">2.</span> <span class="toc-text">直接备份数据文件</span></a></li></ol>
 		
 		</div>
 		
-		<p>看如下脚本，<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"></span></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">redis-cli SAVE</span><br><span class="line"></span><br><span class="line">date=$(date +<span class="string">"%Y%m%d"</span>)</span><br><span class="line">cp /var/lib/redis/<span class="number">6379</span>/dump.rdb /data01/cache_backup/<span class="variable">$date</span>.rdb</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"done!"</span></span><br></pre></td></tr></table></figure></p>
-<p>有如上脚本，便可以cron等方式备份redis数据文件了。细节如下：</p>
-<p>首先必须进行SAVE, 因为redis的rdb文件并非总是内存数据的完整镜像，备份之前必须进行SAVE，即向其发送SAVE命令，其次拷贝走其rdb文件即可。</p>
-<p>rdb的具体路径不一定是如上路径，可以在redis配置文件中查找, /etc/redis/6379.conf</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The filename where to dump the DB</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="comment"># The working directory.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The DB will be written inside this directory, with the filename specified</span></span><br><span class="line"><span class="comment"># above using the 'dbfilename' configuration directive.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Also the Append Only File will be created inside this directory.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Note that you must specify a directory here, not a file name.</span></span><br><span class="line">dir /<span class="reserved">var</span>/lib/redis/<span class="number">6379</span></span><br></pre></td></tr></table></figure>
+		<h2 id="dump_&amp;_restore方法">dump &amp; restore方法</h2><p>要备份一个数据库，<br><code>mongorestore -d db  /path/to/back_up</code><br>例如:<br><code>mongodump -d bookstore -o /data01/db_backup/</code><br>该命令会dump出该DB所有的collection</p>
+<p>从备份文件夹恢复数据<br><code>mongorestore -d bookstore  /data01/db_backup/bookstore</code></p>
+<h3 id="只备份或回复指定的collection">只备份或回复指定的collection</h3><p>以bookstore DB 中statistics 表为例<br><code>mongodump -d bookstore -c statistics -o /data01/db_backup/</code></p>
+<p>然后restore时指定该collection对应的bson文件<br><code>mongorestore -d bookstore -c statistics /data01/db_backup/bookstore/statistics.bson</code></p>
+<h3 id="通过条件查询dump">通过条件查询dump</h3><p>还可以通过一个query来dump中一个collection中符合条件的某些记录, 例如<br><code>mongodump -d bookstore -c novel_sources -q &quot;{\&quot;tag\&quot;: \&quot;tag_11\&quot;}&quot; -o /data01/db_backup/</code></p>
+<h3 id="注意事项">注意事项</h3><ol>
+<li>mongorestore并不会覆盖已有的记录，而是重复添加（如果可以的话）。</li>
+<li>当数据量很大的时候，该方法耗时很大。</li>
+</ol>
+<h2 id="直接备份数据文件">直接备份数据文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">27017</span>/db_to_back --eval <span class="string">"db.fsyncLock()"</span></span><br><span class="line">rsync -avh --delete /path/to/your/mongofile /path/to/backup/folder/</span><br><span class="line">mongo <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">21001</span>/turbo --eval <span class="string">"db.fsyncUnlock()"</span></span><br></pre></td></tr></table></figure>
+<p>关键是第一行和第三行的两个命令,对于db.fsyncLock()，mongodb的文档说明</p>
+<blockquote>
+<p>db.fsyncLock()<br>Forces the mongod to flush all pending write operations to the disk and locks the entire mongod instance to prevent additional writes until the user releases the lock with the db.fsyncUnlock() command. db.fsyncLock() is an administrative command.</p>
+</blockquote>
+<p>将mongod 未完成的写操作写入数据文件并阻止新的写入操作，知道运行<code>db.fsyncUnlock()</code>命令，因此拷贝数据文件前后要执行这两个命令。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -117,13 +124,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/redis/">redis</a>
+  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/redis/">redis</a>
+  <span></span> <a href="/tags/mongodb/">mongodb</a>
   </div>
 
 </div>
@@ -132,7 +139,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/" data-title="备份redis数据文件 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/04/22/2015-04-22-mongodb-dump-and-restore/" data-title="mongodb备份和恢复 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -146,18 +153,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" title="ssh 隧道和反向隧道">
+ <a href="/2015/05/03/2015-05-03-pil-pillow-setup/" title="Python PIL &amp; Pillow 安装">
   <strong>上一篇：</strong><br/>
   <span>
-  ssh 隧道和反向隧道</span>
+  Python PIL &amp; Pillow 安装</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/03/25/2015-03-25-reclaim-disk-space-of-mongodb-data/"  title="回收被 mongodb 占用的硬盘空间">
+<a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/"  title="ssh 隧道和反向隧道">
  <strong>下一篇：</strong><br/> 
- <span>回收被 mongodb 占用的硬盘空间
+ <span>ssh 隧道和反向隧道
 </span>
 </a>
 </div>
@@ -166,7 +173,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/05/2015-04-05-backup-redis-db/" data-title="备份redis数据文件" data-url="http://yoursite.com/2015/04/05/2015-04-05-backup-redis-db/"></div>
+	<div class="ds-thread" data-thread-key="2015/04/22/2015-04-22-mongodb-dump-and-restore/" data-title="mongodb备份和恢复" data-url="http://yoursite.com/2015/04/22/2015-04-22-mongodb-dump-and-restore/"></div>
 </section>
 
 
@@ -176,7 +183,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dump_&_restore方法"><span class="toc-number">1.</span> <span class="toc-text">dump & restore方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#只备份或回复指定的collection"><span class="toc-number">1.1.</span> <span class="toc-text">只备份或回复指定的collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过条件查询dump"><span class="toc-number">1.2.</span> <span class="toc-text">通过条件查询dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-number">1.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接备份数据文件"><span class="toc-number">2.</span> <span class="toc-text">直接备份数据文件</span></a></li></ol>
  
   </div>
 
