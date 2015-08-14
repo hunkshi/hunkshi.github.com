@@ -4,25 +4,40 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>mongodb备份和恢复 | Hunk Shi&#39;s Blog</title>
+    <title>nginx配置一个Basic Auth认证的下载服务 | Hunk Shi&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Hunk Shi">
     
 
     
-    <meta name="description" content="dump &amp;amp; restore方法要备份一个数据库，mongorestore -d db  /path/to/back_up例如:mongodump -d bookstore -o /data01/db_backup/该命令会dump出该DB所有的collection
-从备份文件夹恢复数据mongorestore -d bookstore  /data01/db_backup/booksto">
+    <meta name="description" content="使用nginx可以方便的搭建一个服务列出服务器上指定目录下的文件供用户下载，本文讲述如何搭建该服务，并给出如何配置用户名密码。
+建用户和文件夹
+新建用户 shareuser
+建data文件夹，并chown -R shareuser:shareuser /path/to/data
+
+列出指定目录下的文件需要的指令是autoindex  on;, 即可列出该目录下的所有文件并可以递归计入子目录。
+还有">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mongodb备份和恢复">
-<meta property="og:url" content="http://yoursite.com/2015/04/22/2015-04-22-mongodb-dump-and-restore/index.html">
+<meta property="og:title" content="nginx配置一个Basic Auth认证的下载服务">
+<meta property="og:url" content="http://yoursite.com/2015/08/13/2014-12-03-nginx-basic-auth-download/index.html">
 <meta property="og:site_name" content="Hunk Shi's Blog">
-<meta property="og:description" content="dump &amp;amp; restore方法要备份一个数据库，mongorestore -d db  /path/to/back_up例如:mongodump -d bookstore -o /data01/db_backup/该命令会dump出该DB所有的collection
-从备份文件夹恢复数据mongorestore -d bookstore  /data01/db_backup/booksto">
+<meta property="og:description" content="使用nginx可以方便的搭建一个服务列出服务器上指定目录下的文件供用户下载，本文讲述如何搭建该服务，并给出如何配置用户名密码。
+建用户和文件夹
+新建用户 shareuser
+建data文件夹，并chown -R shareuser:shareuser /path/to/data
+
+列出指定目录下的文件需要的指令是autoindex  on;, 即可列出该目录下的所有文件并可以递归计入子目录。
+还有">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mongodb备份和恢复">
-<meta name="twitter:description" content="dump &amp;amp; restore方法要备份一个数据库，mongorestore -d db  /path/to/back_up例如:mongodump -d bookstore -o /data01/db_backup/该命令会dump出该DB所有的collection
-从备份文件夹恢复数据mongorestore -d bookstore  /data01/db_backup/booksto">
+<meta name="twitter:title" content="nginx配置一个Basic Auth认证的下载服务">
+<meta name="twitter:description" content="使用nginx可以方便的搭建一个服务列出服务器上指定目录下的文件供用户下载，本文讲述如何搭建该服务，并给出如何配置用户名密码。
+建用户和文件夹
+新建用户 shareuser
+建data文件夹，并chown -R shareuser:shareuser /path/to/data
+
+列出指定目录下的文件需要的指令是autoindex  on;, 即可列出该目录下的所有文件并可以递归计入子目录。
+还有">
 
     
     <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
@@ -82,14 +97,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/22/2015-04-22-mongodb-dump-and-restore/" title="mongodb备份和恢复" itemprop="url">mongodb备份和恢复</a>
+      <a href="/2015/08/13/2014-12-03-nginx-basic-auth-download/" title="nginx配置一个Basic Auth认证的下载服务" itemprop="url">nginx配置一个Basic Auth认证的下载服务</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-22T10:49:52.000Z" itemprop="datePublished"> 发表于 2015-04-22</time>
+    <time datetime="2015-08-13T10:41:26.000Z" itemprop="datePublished"> 发表于 2015-08-13</time>
     
   </p>
 </header>
@@ -98,25 +113,26 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dump_&_restore方法"><span class="toc-number">1.</span> <span class="toc-text">dump & restore方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#只备份或回复指定的collection"><span class="toc-number">1.1.</span> <span class="toc-text">只备份或回复指定的collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过条件查询dump"><span class="toc-number">1.2.</span> <span class="toc-text">通过条件查询dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-number">1.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接备份数据文件"><span class="toc-number">2.</span> <span class="toc-text">直接备份数据文件</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#建用户和文件夹"><span class="toc-number">1.</span> <span class="toc-text">建用户和文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列出指定目录下的文件"><span class="toc-number">2.</span> <span class="toc-text">列出指定目录下的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Basic_Auth"><span class="toc-number">3.</span> <span class="toc-text">配置Basic Auth</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#密码文件生成"><span class="toc-number">3.1.</span> <span class="toc-text">密码文件生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Config_Sample"><span class="toc-number">4.</span> <span class="toc-text">Config Sample</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="dump_&amp;_restore方法">dump &amp; restore方法</h2><p>要备份一个数据库，<br><code>mongorestore -d db  /path/to/back_up</code><br>例如:<br><code>mongodump -d bookstore -o /data01/db_backup/</code><br>该命令会dump出该DB所有的collection</p>
-<p>从备份文件夹恢复数据<br><code>mongorestore -d bookstore  /data01/db_backup/bookstore</code></p>
-<h3 id="只备份或回复指定的collection">只备份或回复指定的collection</h3><p>以bookstore DB 中statistics 表为例<br><code>mongodump -d bookstore -c statistics -o /data01/db_backup/</code></p>
-<p>然后restore时指定该collection对应的bson文件<br><code>mongorestore -d bookstore -c statistics /data01/db_backup/bookstore/statistics.bson</code></p>
-<h3 id="通过条件查询dump">通过条件查询dump</h3><p>还可以通过一个query来dump中一个collection中符合条件的某些记录, 例如<br><code>mongodump -d bookstore -c novel_sources -q &quot;{\&quot;tag\&quot;: \&quot;tag_11\&quot;}&quot; -o /data01/db_backup/</code></p>
-<h3 id="注意事项">注意事项</h3><ol>
-<li>mongorestore并不会覆盖已有的记录，而是重复添加（如果可以的话）。</li>
-<li>当数据量很大的时候，该方法耗时很大。</li>
+		<p>使用nginx可以方便的搭建一个服务列出服务器上指定目录下的文件供用户下载，本文讲述如何搭建该服务，并给出如何配置用户名密码。</p>
+<h2 id="建用户和文件夹">建用户和文件夹</h2><ol>
+<li>新建用户 shareuser</li>
+<li>建data文件夹，并chown -R shareuser:shareuser /path/to/data</li>
 </ol>
-<h2 id="直接备份数据文件">直接备份数据文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">27017</span>/db_to_back --eval <span class="string">"db.fsyncLock()"</span></span><br><span class="line">rsync -avh --delete /path/to/your/mongofile /path/to/backup/folder/</span><br><span class="line">mongo <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">21001</span>/turbo --eval <span class="string">"db.fsyncUnlock()"</span></span><br></pre></td></tr></table></figure>
-<p>关键是第一行和第三行的两个命令,对于db.fsyncLock()，mongodb的文档说明</p>
-<blockquote>
-<p>db.fsyncLock()<br>Forces the mongod to flush all pending write operations to the disk and locks the entire mongod instance to prevent additional writes until the user releases the lock with the db.fsyncUnlock() command. db.fsyncLock() is an administrative command.</p>
-</blockquote>
-<p>将mongod 未完成的写操作写入数据文件并阻止新的写入操作，知道运行<code>db.fsyncUnlock()</code>命令，因此拷贝数据文件前后要执行这两个命令。</p>
+<h2 id="列出指定目录下的文件">列出指定目录下的文件</h2><p>需要的指令是<code>autoindex  on;</code>, 即可列出该目录下的所有文件并可以递归计入子目录。</p>
+<p>还有两个辅助的指令<br><code>autoindex_exact_size on | off;</code> , 即文件大小以字节数显示还是K/M/G显示<br><code>autoindex_localtime on | off;</code> 以local timezone还是UTC显示文件的修改时间。</p>
+<h2 id="配置Basic_Auth">配置Basic Auth</h2><p>两个指令<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">auth_basic</span> <span class="string">"Restricted"</span>;</span><br><span class="line"><span class="title">auth_basic_user_file</span> ./passwd;</span><br></pre></td></tr></table></figure></p>
+<p><code>auth_basic_user_file</code>是一个存储用户名密码的文件。需要htpasswd命令来生成，</p>
+<h3 id="密码文件生成">密码文件生成</h3><ol>
+<li>首先需要安装<code>sudo apt-get install apache2-utils</code></li>
+<li>命令<code>htpasswd -c /path/to/passwd username</code><br> -c  是新建一个文件, 如果是append到已有文件，不用该选项。<br> 根据提示输入密码即可。</li>
+</ol>
+<h2 id="Config_Sample">Config Sample</h2><p>测试项目文件结构如下<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">app</span></span><br><span class="line">	<span class="keyword">conf</span></span><br><span class="line">		nginx.<span class="keyword">conf</span></span><br><span class="line">    	passwd</span><br><span class="line">	data</span><br></pre></td></tr></table></figure></p>
+<p>最终的结果如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">  <span class="title">user</span> shareuser;</span><br><span class="line"></span><br><span class="line">  <span class="title">server</span> &#123;</span><br><span class="line">    <span class="title">listen</span> <span class="number">8011</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title">root</span> data;</span><br><span class="line">    <span class="comment"># index index.html index.htm;	#关闭index,  否则会显示index.html而不是列出文件</span></span><br><span class="line"></span><br><span class="line">    <span class="title">location</span>  /  &#123;</span><br><span class="line">      <span class="title">autoindex</span>  <span class="built_in">on</span>;</span><br><span class="line">      <span class="title">autoindex_exact_size</span> <span class="built_in">off</span>;</span><br><span class="line">      <span class="title">autoindex_localtime</span> <span class="built_in">on</span>;</span><br><span class="line"></span><br><span class="line">      <span class="title">auth_basic</span> <span class="string">"Restricted"</span>;</span><br><span class="line">      <span class="title">auth_basic_user_file</span> passwd;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动 <code>nginx -p /path/to/app -c conf/nginx.conf</code> 即可访问。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -124,13 +140,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
+  <a class="article-category-link" href="/categories/nginx/">nginx</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/mongodb/">mongodb</a>
+  <span></span> <a href="/tags/nginx/">nginx</a>
   </div>
 
 </div>
@@ -139,7 +155,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/04/22/2015-04-22-mongodb-dump-and-restore/" data-title="mongodb备份和恢复 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/08/13/2014-12-03-nginx-basic-auth-download/" data-title="nginx配置一个Basic Auth认证的下载服务 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -152,19 +168,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/05/03/2015-05-03-pil-pillow-setup/" title="Python PIL &amp; Pillow 安装">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Python PIL &amp; Pillow 安装</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/"  title="ssh 隧道和反向隧道">
+<a href="/2015/05/03/2015-05-03-pil-pillow-setup/"  title="Python PIL &amp; Pillow 安装">
  <strong>下一篇：</strong><br/> 
- <span>ssh 隧道和反向隧道
+ <span>Python PIL &amp; Pillow 安装
 </span>
 </a>
 </div>
@@ -173,7 +181,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/22/2015-04-22-mongodb-dump-and-restore/" data-title="mongodb备份和恢复" data-url="http://yoursite.com/2015/04/22/2015-04-22-mongodb-dump-and-restore/"></div>
+	<div class="ds-thread" data-thread-key="2015/08/13/2014-12-03-nginx-basic-auth-download/" data-title="nginx配置一个Basic Auth认证的下载服务" data-url="http://yoursite.com/2015/08/13/2014-12-03-nginx-basic-auth-download/"></div>
 </section>
 
 
@@ -183,7 +191,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#dump_&_restore方法"><span class="toc-number">1.</span> <span class="toc-text">dump & restore方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#只备份或回复指定的collection"><span class="toc-number">1.1.</span> <span class="toc-text">只备份或回复指定的collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过条件查询dump"><span class="toc-number">1.2.</span> <span class="toc-text">通过条件查询dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-number">1.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接备份数据文件"><span class="toc-number">2.</span> <span class="toc-text">直接备份数据文件</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#建用户和文件夹"><span class="toc-number">1.</span> <span class="toc-text">建用户和文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列出指定目录下的文件"><span class="toc-number">2.</span> <span class="toc-text">列出指定目录下的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Basic_Auth"><span class="toc-number">3.</span> <span class="toc-text">配置Basic Auth</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#密码文件生成"><span class="toc-number">3.1.</span> <span class="toc-text">密码文件生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Config_Sample"><span class="toc-number">4.</span> <span class="toc-text">Config Sample</span></a></li></ol>
  
   </div>
 
