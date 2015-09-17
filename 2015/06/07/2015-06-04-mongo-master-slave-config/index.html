@@ -4,25 +4,34 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>ssh 隧道和反向隧道 | Hunk Shi&#39;s Blog</title>
+    <title>Mongodb Master-Slave模式配置及常见问题 | Hunk Shi&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Hunk Shi">
     
 
     
-    <meta name="description" content="ssh 隧道使用场景我们经常要通过跳板机器去访问一些内部的机器，比如Production 环境中的一些服务器，正常模式下如果scp一些文件或者远程执行一些命令，都需要先登录跳板机器，再登录内部的服务器。ssh 隧道可以很方便的解决这个问题。
-假设office里的PC是A， 跳板机器B 111.111.111.111， 内部的server是C，B可以通过内部地址例如192.168.2.2, 端口22">
+    <meta name="description" content="master-slave是一种经典的数据复制模式，可以1个master + N个slave构成一个集群，一方面实现数据的冗余备份，一方面实现读写分离。在大型的web应用中经常使用。
+配置mongodb的master-slave模式配置方式如下
+keyFile
+生成key_file openssl rand -base64 741 &amp;gt; mongo_key
+将mongo_key 分别置于mast">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ssh 隧道和反向隧道">
-<meta property="og:url" content="http://yoursite.com/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/index.html">
+<meta property="og:title" content="Mongodb Master-Slave模式配置及常见问题">
+<meta property="og:url" content="http://yoursite.com/2015/06/07/2015-06-04-mongo-master-slave-config/index.html">
 <meta property="og:site_name" content="Hunk Shi's Blog">
-<meta property="og:description" content="ssh 隧道使用场景我们经常要通过跳板机器去访问一些内部的机器，比如Production 环境中的一些服务器，正常模式下如果scp一些文件或者远程执行一些命令，都需要先登录跳板机器，再登录内部的服务器。ssh 隧道可以很方便的解决这个问题。
-假设office里的PC是A， 跳板机器B 111.111.111.111， 内部的server是C，B可以通过内部地址例如192.168.2.2, 端口22">
+<meta property="og:description" content="master-slave是一种经典的数据复制模式，可以1个master + N个slave构成一个集群，一方面实现数据的冗余备份，一方面实现读写分离。在大型的web应用中经常使用。
+配置mongodb的master-slave模式配置方式如下
+keyFile
+生成key_file openssl rand -base64 741 &amp;gt; mongo_key
+将mongo_key 分别置于mast">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ssh 隧道和反向隧道">
-<meta name="twitter:description" content="ssh 隧道使用场景我们经常要通过跳板机器去访问一些内部的机器，比如Production 环境中的一些服务器，正常模式下如果scp一些文件或者远程执行一些命令，都需要先登录跳板机器，再登录内部的服务器。ssh 隧道可以很方便的解决这个问题。
-假设office里的PC是A， 跳板机器B 111.111.111.111， 内部的server是C，B可以通过内部地址例如192.168.2.2, 端口22">
+<meta name="twitter:title" content="Mongodb Master-Slave模式配置及常见问题">
+<meta name="twitter:description" content="master-slave是一种经典的数据复制模式，可以1个master + N个slave构成一个集群，一方面实现数据的冗余备份，一方面实现读写分离。在大型的web应用中经常使用。
+配置mongodb的master-slave模式配置方式如下
+keyFile
+生成key_file openssl rand -base64 741 &amp;gt; mongo_key
+将mongo_key 分别置于mast">
 
     
     <link rel="alternative" href="/atom.xml" title="Hunk Shi&#39;s Blog" type="application/atom+xml">
@@ -82,14 +91,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" title="ssh 隧道和反向隧道" itemprop="url">ssh 隧道和反向隧道</a>
+      <a href="/2015/06/07/2015-06-04-mongo-master-slave-config/" title="Mongodb Master-Slave模式配置及常见问题" itemprop="url">Mongodb Master-Slave模式配置及常见问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Hunk Shi" target="_blank" itemprop="author">Hunk Shi</a>
 		
   <p class="article-time">
-    <time datetime="2015-04-15T07:20:01.000Z" itemprop="datePublished"> 发表于 2015-04-15</time>
+    <time datetime="2015-06-07T08:13:58.000Z" itemprop="datePublished"> 发表于 2015-06-07</time>
     
   </p>
 </header>
@@ -98,21 +107,31 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh_隧道"><span class="toc-number">1.</span> <span class="toc-text">ssh 隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-number">1.1.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令"><span class="toc-number">1.2.</span> <span class="toc-text">命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用"><span class="toc-number">1.3.</span> <span class="toc-text">如何使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh_反向隧道"><span class="toc-number">2.</span> <span class="toc-text">ssh 反向隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景-1"><span class="toc-number">2.1.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令-1"><span class="toc-number">2.2.</span> <span class="toc-text">命令</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-number">1.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#keyFile"><span class="toc-number">1.1.</span> <span class="toc-text">keyFile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#master配置"><span class="toc-number">1.2.</span> <span class="toc-text">master配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#slave_配置"><span class="toc-number">1.3.</span> <span class="toc-text">slave 配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置更改"><span class="toc-number">2.</span> <span class="toc-text">配置更改</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#操作办法"><span class="toc-number">2.0.1.</span> <span class="toc-text">操作办法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他问题"><span class="toc-number">3.</span> <span class="toc-text">其他问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#手动强制同步"><span class="toc-number">3.1.</span> <span class="toc-text">手动强制同步</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h2 id="ssh_隧道">ssh 隧道</h2><h3 id="使用场景">使用场景</h3><p>我们经常要通过跳板机器去访问一些内部的机器，比如Production 环境中的一些服务器，正常模式下如果scp一些文件或者远程执行一些命令，都需要先登录跳板机器，再登录内部的服务器。<br>ssh 隧道可以很方便的解决这个问题。</p>
-<p>假设office里的PC是A， 跳板机器B 111.111.111.111， 内部的server是C，B可以通过内部地址例如192.168.2.2, 端口22访问到C， 如下命令既可建立一个隧道，从A直接到C: ssh -NfL <local port="">:<c address="">:<c port=""> <username>@<b address=""></b></username></c></c></local></p>
-<h3 id="命令">命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -NfL <span class="number">2345</span>:<span class="number">192.168</span>.<span class="number">2.2</span>:<span class="number">22</span> alex@<span class="number">111.111</span>.<span class="number">111.111</span></span><br></pre></td></tr></table></figure>
-<p><strong>参数解释</strong></p>
-<p>-N Do not execute a remote command.  This is useful for just forwarding ports (protocol version 2 only). 即不执行命令， 只做端口转发<br>-f Requests ssh to go to background just before command execution. 然ssh隧道在后台运行。看进程关系即可明白。<br>-L Specifies that the given port on the local (client) host is to be forwarded to the given host and port on the remote side. 指定本地端口用于转发。</p>
-<h3 id="如何使用">如何使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -P <span class="number">2345</span> /path/to/file root@<span class="number">127.0</span>.<span class="number">0.1</span>:/path/on/remote/server</span><br></pre></td></tr></table></figure>
-<p>即可scp文件到server C, 注意2345是建立隧道时指定的本地端口，或者远程执行命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -p <span class="number">2345</span> root@<span class="number">127.0</span>.<span class="number">0.1</span> <span class="string">"ls -l /"</span></span><br></pre></td></tr></table></figure>
-<h2 id="ssh_反向隧道">ssh 反向隧道</h2><h3 id="使用场景-1">使用场景</h3><p>假设有Office机器A，无公网地址，现在有一台公网机器B，家里的机器C和A都可以访问B，那么既可通过B 来实现从C到A的访问。需要先在A和B之间建立一个反向隧道。</p>
-<h3 id="命令-1">命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -NfR <span class="number">2222</span>:<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">22</span> root@B</span><br></pre></td></tr></table></figure>
-<p>那么从C登录到B 之后，即可通过如下命令跳到A<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -p <span class="number">2222</span> alex@localhost</span><br></pre></td></tr></table></figure></p>
+		<p>master-slave是一种经典的数据复制模式，可以1个master + N个slave构成一个集群，一方面实现数据的冗余备份，一方面实现读写分离。在大型的web应用中经常使用。</p>
+<h2 id="配置">配置</h2><p>mongodb的master-slave模式配置方式如下</p>
+<h3 id="keyFile">keyFile</h3><ol>
+<li>生成key_file <code>openssl rand -base64 741 &gt; mongo_key</code></li>
+<li>将mongo_key 分别置于master 和 slave mongodb user可以access的地方。</li>
+<li>设置权限 <code>chmod 700 mongo_key</code></li>
+<li>设置onwer <code>chown mongodb:nogroup mongo_key</code></li>
+</ol>
+<h3 id="master配置">master配置</h3><p>编辑/etc/mongodb.conf, 设置如下<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">master = <span class="value"><span class="keyword">true</span></span></span></span><br><span class="line"><span class="setting">keyFile = <span class="value">/path/to/mongo_key</span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="slave_配置">slave 配置</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">slave = <span class="value"><span class="keyword">true</span></span></span></span><br><span class="line"><span class="setting">source = <span class="value">&lt;ip of master&gt;</span></span></span><br><span class="line"><span class="setting">only = <span class="value">bookstore</span></span></span><br><span class="line"><span class="setting">keyFile = <span class="value">/usr/local/bookstore/mongo_key</span></span></span><br></pre></td></tr></table></figure>
+<p>如果只同步一个db，配置only项，如果多个DB需同步，注释掉only项。</p>
+<p>以上设置完毕后即可启动master和slave了，如果配置有误会启动失败，比如key_file权限不正确，具体错误可以查看/var/log/mongodb/mongodb.log。如无误，即可在master上修改一些记录进行验证了。</p>
+<h2 id="配置更改">配置更改</h2><p>master-slave配置比较简单，但要修改已经运行正确的配置缺不是想象的那么简单。例如要更改master地址，或者去除only配置。因为mongodb启动时，会将配置写入DB中，master的配置在local DB的slaves表中, slave的配置在local DB的sources表中。如果单独更改conf文件，直接重启会失败，log中显示和DB中的配置冲突。如果直接修改local DB，修改会很快被覆盖。</p>
+<h4 id="操作办法">操作办法</h4><ol>
+<li>取消slave配置重启。即注释掉slave = true这一行。</li>
+<li>手动修改sources表，例如更改master 的ip或者去除only 项。</li>
+<li>修改conf文件，打开slave = true，并修改其他项，例如更改master 的ip或者去除only 项。</li>
+<li>再次重启mongodb。</li>
+</ol>
+<h2 id="其他问题">其他问题</h2><h3 id="手动强制同步">手动强制同步</h3><p>如果slave因为特殊原因和master不同步，需要手动强制同步，方法为在slave上运行如下命令：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">use</span> <span class="tag">admin</span></span><br><span class="line"><span class="tag">db</span><span class="class">.runCommand</span>( &#123; <span class="attribute">resync</span>: <span class="number">1</span> &#125; )</span><br></pre></td></tr></table></figure></p>
+<p>如果数据落后较多，则需要较长时间。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -120,13 +139,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
+  <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/ssh/">ssh</a>
+  <span></span> <a href="/tags/mongodb/">mongodb</a>
   </div>
 
 </div>
@@ -135,7 +154,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" data-title="ssh 隧道和反向隧道 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/06/07/2015-06-04-mongo-master-slave-config/" data-title="Mongodb Master-Slave模式配置及常见问题 | Hunk Shi&#39;s Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -148,19 +167,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/04/22/2015-04-22-mongodb-dump-and-restore/" title="mongodb备份和恢复">
-  <strong>上一篇：</strong><br/>
-  <span>
-  mongodb备份和恢复</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/04/05/2015-04-05-backup-redis-db/"  title="备份redis数据文件">
+<a href="/2015/05/03/2015-05-03-pil-pillow-setup/"  title="Python PIL &amp; Pillow 安装">
  <strong>下一篇：</strong><br/> 
- <span>备份redis数据文件
+ <span>Python PIL &amp; Pillow 安装
 </span>
 </a>
 </div>
@@ -169,7 +180,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/" data-title="ssh 隧道和反向隧道" data-url="http://yoursite.com/2015/04/15/2015-04-15-ssh-tunnel-and-reversed-tunnel/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/07/2015-06-04-mongo-master-slave-config/" data-title="Mongodb Master-Slave模式配置及常见问题" data-url="http://yoursite.com/2015/06/07/2015-06-04-mongo-master-slave-config/"></div>
 </section>
 
 
@@ -179,7 +190,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh_隧道"><span class="toc-number">1.</span> <span class="toc-text">ssh 隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-number">1.1.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令"><span class="toc-number">1.2.</span> <span class="toc-text">命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用"><span class="toc-number">1.3.</span> <span class="toc-text">如何使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh_反向隧道"><span class="toc-number">2.</span> <span class="toc-text">ssh 反向隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景-1"><span class="toc-number">2.1.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令-1"><span class="toc-number">2.2.</span> <span class="toc-text">命令</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-number">1.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#keyFile"><span class="toc-number">1.1.</span> <span class="toc-text">keyFile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#master配置"><span class="toc-number">1.2.</span> <span class="toc-text">master配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#slave_配置"><span class="toc-number">1.3.</span> <span class="toc-text">slave 配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置更改"><span class="toc-number">2.</span> <span class="toc-text">配置更改</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#操作办法"><span class="toc-number">2.0.1.</span> <span class="toc-text">操作办法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他问题"><span class="toc-number">3.</span> <span class="toc-text">其他问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#手动强制同步"><span class="toc-number">3.1.</span> <span class="toc-text">手动强制同步</span></a></li></ol></li></ol>
  
   </div>
 
