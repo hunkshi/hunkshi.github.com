@@ -106,7 +106,7 @@
 <p>从备份文件夹恢复数据<br><code>mongorestore -d bookstore  /data01/db_backup/bookstore</code></p>
 <h3 id="只备份或回复指定的collection">只备份或回复指定的collection</h3><p>以bookstore DB 中statistics 表为例<br><code>mongodump -d bookstore -c statistics -o /data01/db_backup/</code></p>
 <p>然后restore时指定该collection对应的bson文件<br><code>mongorestore -d bookstore -c statistics /data01/db_backup/bookstore/statistics.bson</code></p>
-<h3 id="通过条件查询dump">通过条件查询dump</h3><p>还可以通过一个query来dump中一个collection中符合条件的某些记录, 例如<br><code>mongodump -d bookstore -c novel_sources -q &quot;{\&quot;tag\&quot;: \&quot;tag_11\&quot;}&quot; -o /data01/db_backup/</code></p>
+<h3 id="通过条件查询dump">通过条件查询dump</h3><p>还可以通过一个query来dump中一个collection中符合条件的某些记录, 例如<br><code>mongodump -d bookstore -c novel_sources -q &quot;{\&quot;tag\&quot;: \&quot;tag_11\&quot;}&quot; -o /data01/db_backup/</code><br>要注意的是如果query中有$符号，需要转义，例如<br><code>mongodump -d qunimei -c collection_name -q &quot;{\&quot;date\&quot;: {\&quot;\$gte\&quot;: \&quot;2015-03-25\&quot;}}&quot; -o /path/to/dump</code></p>
 <h3 id="注意事项">注意事项</h3><ol>
 <li>mongorestore并不会覆盖已有的记录，而是重复添加（如果可以的话）。</li>
 <li>当数据量很大的时候，该方法耗时很大。</li>
