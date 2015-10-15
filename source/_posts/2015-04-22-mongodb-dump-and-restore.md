@@ -27,6 +27,8 @@ category: mongodb
 ###通过条件查询dump
 还可以通过一个query来dump中一个collection中符合条件的某些记录, 例如
 `mongodump -d bookstore -c novel_sources -q "{\"tag\": \"tag_11\"}" -o /data01/db_backup/`
+要注意的是如果query中有$符号，需要转义，例如
+`mongodump -d qunimei -c collection_name -q "{\"date\": {\"\$gte\": \"2015-03-25\"}}" -o /path/to/dump`
 
 ### 注意事项
 1. mongorestore并不会覆盖已有的记录，而是重复添加（如果可以的话）。
